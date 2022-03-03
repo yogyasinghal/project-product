@@ -5,11 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var productRouter = require('./routes/product');
 
 var app = express();
-// var axios = require('axios');
+
 require('dotenv').config();
 
 // view engine setup
@@ -22,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+// connecting mongodb atlas
 var mongoose = require('mongoose');
 var mongoDB = `mongodb+srv://yogya:${process.env.DB_PASS}@cluster0.ebsn2.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
@@ -30,18 +29,9 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
-// axios.get(`http://localhost:8000/users`)
-//    .then(res=>{
-//      console.log("axios get successfull");
-//      console.log(res.data);
-//    })
-//    .catch(err=>{
-//      console.log("axios get unsuccessfull");
-//      console.log(err);
-//    })
+// using different routes
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/products',productRouter);
 
 // catch 404 and forward to error handler
@@ -59,6 +49,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   // res.render('error');
 });
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT,()=>{
   console.log("listening on port 8000");

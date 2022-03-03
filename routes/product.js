@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const Product = require('../models/product');
 
+// finding specific product with code
 router.get('/:code',(req,res)=>{
   Product.find({code:req.params.code})
   .exec()
@@ -20,6 +21,7 @@ router.get('/:code',(req,res)=>{
   })
 })
 
+// fetching all products
 router.get('/', function(req, res, next) {
 
   Product.find()
@@ -36,7 +38,7 @@ router.get('/', function(req, res, next) {
 });
 
 
-
+// adding a product
 router.post('/', function(req, res, next) {
   console.log("req.body = ",req.body);
   Product.find({code:req.body.code})
